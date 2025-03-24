@@ -5,7 +5,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Table(name="tb_tellphones")

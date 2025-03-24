@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -26,7 +26,7 @@ public class UserController {
 
         userRepository.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return  new ResponseEntity(user, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
@@ -35,5 +35,42 @@ public class UserController {
         return userRepository.findById(id)
                 .map(user -> new ResponseEntity(user, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity("User not found", HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping
+    public ResponseEntity getUserList(){
+
+        List<User> userList = userRepository.findAll();
+        return new ResponseEntity(userList, HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity updateUser(@PathVariable("id") Long id, @RequestBody UserDTO dto){
+        User user = userRepository.findById(id)
+                .orElseGet(null);
+
+        if(!dto.getName().isEmpty()){
+            user.setName(dto.getName());
+        }
+
+        if(!dto.getLastName().isEmpty()){
+            user.setLastName(dto.getLastName());
+        }
+
+        if(dto.getAge() != user.getAge()){
+            user.setAge(dto.getAge());
+        }
+
+        userRepository.save(user);
+
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id){
+
+        userRepository.deleteById(id);
+
+        return  new ResponseEntity("User removed", HttpStatus.OK);
     }
 }

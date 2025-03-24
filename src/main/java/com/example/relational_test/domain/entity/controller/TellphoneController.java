@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tellphones")
@@ -33,8 +34,30 @@ public class TellphoneController {
 
         tellphoneRepository.save(tellphone);
 
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return new ResponseEntity(tellphone, HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity getTellList(){
+        List<Tellphone> tellphoneList = tellphoneRepository.findAll();
+
+        return new ResponseEntity(tellphoneList, HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity updateTell(@PathVariable("id")  Long id, @RequestBody TellphoneDTO dto){
+        Tellphone tellphone = tellphoneRepository.findById(id)
+                .orElseGet(null);
+
+        if(dto.getNumber() != tellphone.getNumber()){
+            tellphone.setNumber(dto.getNumber());
+        }
+
+        tellphoneRepository.save(tellphone);
+
+        return new ResponseEntity(tellphone, HttpStatus.OK);
+    }
+
 
     @GetMapping("{id}")
     public ResponseEntity getTellphone(@PathVariable("id") Long id){
@@ -43,4 +66,11 @@ public class TellphoneController {
                 .orElseGet(() -> new ResponseEntity("Erro", HttpStatus.NOT_FOUND));
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteTell(@PathVariable("id") Long id){
+
+        tellphoneRepository.deleteById(id);
+
+        return new ResponseEntity("Tellphone removed", HttpStatus.OK);
+    }
 }
