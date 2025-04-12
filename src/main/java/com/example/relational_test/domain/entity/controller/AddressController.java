@@ -1,10 +1,8 @@
 package com.example.relational_test.domain.entity.controller;
 
 import com.example.relational_test.domain.entity.Address;
-import com.example.relational_test.domain.entity.Tellphone;
 import com.example.relational_test.domain.entity.User;
 import com.example.relational_test.domain.entity.dto.AddressDTO;
-import com.example.relational_test.domain.entity.dto.TellphoneDTO;
 import com.example.relational_test.repository.AddressRepository;
 import com.example.relational_test.repository.UserRepository;
 import org.springframework.http.HttpStatus;
